@@ -1,3 +1,82 @@
+let allData = [];
+let selectedViolations = [];
+let dropdownOpen = false;
+let searchQuery = "";
+let sortDirection = {}; // ADD THIS - needed for sorting
+
+d3.text("violations_by_street.csv", function(data) {
+    allData = d3.csv.parseRows(data);
+    
+    var headers = allData[0];
+    var violationTypes = headers.slice(1);
+    
+    // Create checkboxes
+    var checkboxContainer = d3.select("#violation-checkboxes");
+    
+    violationTypes.forEach(function(violation) {
+        var label = checkboxContainer.append("label")
+            .style("display", "block")
+            .style("margin", "5px 0");
+        
+        label.append("input")
+            .attr("type", "checkbox")
+            .attr("value", violation)
+            .attr("class", "violation-checkbox")
+            .property("checked", true);
+        
+        label.append("span")
+            .text(" " + violation);
+    });
+    
+    // Toggle dropdown
+    d3.select("#dropdown-toggle").on("click", function() {
+        dropdownOpen = !dropdownOpen;
+        var menu = d3.select("#dropdown-menu");
+        
+        if (dropdownOpen) {
+            menu.classed("dropdown-hidden", false)
+                .classed("dropdown-visible", true);
+            d3.select("#dropdown-toggle").text("Select Violations ▲");
+        } else {
+            menu.classed("dropdown-visible", false)
+                .classed("dropdown-hidden", true);
+            d3.select("#dropdown-toggle").text("Select Violations ▼");
+        }
+    });
+    
+    // Apply filter
+    d3.select("#apply-filter").on("click", function() {
+        selectedViolations = [];
+        d3.selectAll(".violation-checkbox:checked").each(function() {
+            selectedViolations.push(this.value);
+        });
+        renderTable();
+    });
+    
+    // Reset violations
+    d3.select("#reset-filter").on("click", function() {
+        d3.selectAll(".violation-checkbox").property("checked", true);
+        selectedViolations = [];
+        renderTable();
+    });
+    
+    // Search input listener
+    d3.select("#street-search").on("input", function() {
+        searchQuery = this.value.toLowerCase().trim();
+        renderTable();
+    });
+    
+    // Clear search button
+    d3.select("#clear-search").on("click", function() {
+        d3.select("#street-search").property("value", "");
+        searchQuery = "";
+        renderTable();
+    });
+    
+    // Initial render
+    renderTable();
+});
+
 function renderTable() {
     d3.select("#parking_table").html("");
     
@@ -27,7 +106,7 @@ function renderTable() {
     // Filter by search query
     if (searchQuery !== "") {
         displayData = displayData.filter(function(row, index) {
-            if (index === 0) return true; // Keep header row
+            if (index === 0) return true;
             var streetName = row[0].toLowerCase();
             return streetName.includes(searchQuery);
         });
@@ -35,7 +114,7 @@ function renderTable() {
     
     var container = d3.select("#parking_table").append("table");
     
-    // NEW: Create header row with sort icons
+    // Create header row with sort icons
     var headerRow = displayData[0];
     var thead = container.append("thead").append("tr");
     
@@ -44,23 +123,31 @@ function renderTable() {
         .enter()
         .append("th")
         .html(function(d, i) {
-            // Add sort icon for numeric columns (all except first column which is street_name)
             if (i > 0) {
                 return d + ' <span class="sort-icon" data-column="' + i + '">⇅</span>';
             }
             return d;
         })
         .on("click", function(event, d) {
-            var columnIndex = d3.select(event.target).select(".sort-icon").attr("data-column");
-            if (columnIndex) {
-                sortTable(parseInt(columnIndex), displayData);
+            var target = event.target;
+            var columnIndex;
+            
+            if (target.classList && target.classList.contains("sort-icon")) {
+                columnIndex = parseInt(target.getAttribute("data-column"));
+                sortTable(columnIndex, displayData);
+            } else {
+                var sortIcon = d3.select(target).select(".sort-icon");
+                columnIndex = sortIcon.attr("data-column");
+                if (columnIndex) {
+                    sortTable(parseInt(columnIndex), displayData);
+                }
             }
         });
     
-    // Create body rows (skip header)
+    // Create body rows
     var tbody = container.append("tbody");
     tbody.selectAll("tr")
-        .data(displayData.slice(1)).enter()  // Skip first row (headers)
+        .data(displayData.slice(1)).enter()
         .append("tr")
         .selectAll("td")
         .data(function(d) { return d; }).enter()
@@ -68,11 +155,7 @@ function renderTable() {
         .text(function(d) { return d; });
 }
 
-// NEW: Sort function
-let sortDirection = {}; // Track sort direction for each column
-
 function sortTable(columnIndex, displayData) {
-    // Toggle sort direction
     if (!sortDirection[columnIndex]) {
         sortDirection[columnIndex] = "desc";
     } else if (sortDirection[columnIndex] === "desc") {
@@ -82,9 +165,8 @@ function sortTable(columnIndex, displayData) {
     }
     
     var headers = displayData[0];
-    var dataRows = displayData.slice(1); // Get all rows except header
+    var dataRows = displayData.slice(1);
     
-    // Sort the data
     dataRows.sort(function(a, b) {
         var aVal = parseFloat(a[columnIndex]) || 0;
         var bVal = parseFloat(b[columnIndex]) || 0;
@@ -96,14 +178,11 @@ function sortTable(columnIndex, displayData) {
         }
     });
     
-    // Rebuild displayData with sorted rows
     var sortedData = [headers].concat(dataRows);
     
-    // Re-render table with sorted data
     d3.select("#parking_table").html("");
     var container = d3.select("#parking_table").append("table");
     
-    // Recreate header with sort icons
     var thead = container.append("thead").append("tr");
     thead.selectAll("th")
         .data(headers)
@@ -123,19 +202,20 @@ function sortTable(columnIndex, displayData) {
         })
         .on("click", function(event, d) {
             var target = event.target;
-            if (target.classList.contains("sort-icon")) {
-                var colIndex = parseInt(target.getAttribute("data-column"));
+            var colIndex;
+            
+            if (target.classList && target.classList.contains("sort-icon")) {
+                colIndex = parseInt(target.getAttribute("data-column"));
                 sortTable(colIndex, sortedData);
             } else {
                 var sortIcon = d3.select(target).select(".sort-icon");
-                var colIndex = sortIcon.attr("data-column");
+                colIndex = sortIcon.attr("data-column");
                 if (colIndex) {
                     sortTable(parseInt(colIndex), sortedData);
                 }
             }
         });
     
-    // Recreate body
     var tbody = container.append("tbody");
     tbody.selectAll("tr")
         .data(dataRows).enter()
