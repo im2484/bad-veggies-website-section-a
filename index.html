@@ -19,14 +19,18 @@
 	<!-- This is a placeholder for the table of vegetables.-->
 	<h5> Boston Parking </h5>
 <div class="filter-section">
-    <label>Select Violations to Display:</label>
-    <div id="violation-checkboxes"></div>
-    <button id="apply-filter">Apply Filter</button>
-    <button id="reset-filter">Show All</button>
+    <button id="dropdown-toggle">Select Violations ▼</button>
+    <div id="dropdown-menu" class="dropdown-hidden">
+        <div id="violation-checkboxes"></div>
+        <div class="button-group">
+            <button id="apply-filter">Apply Filter</button>
+            <button id="reset-filter">Show All</button>
+        </div>
+    </div>
 </div>
 
 <div id="parking_table"></div>
-<div id="parking_table"></div>
+
 
 
 	<p> As you can see in the table above, my shopping list has vegetables of various colors. </p>
