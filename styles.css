@@ -37,6 +37,10 @@ th {
     background-color: #f3f4f6;
     font-weight: bold;
     z-index: 10;
+	cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 30px;
 }
 .filter-section {
     position: relative;
@@ -175,13 +179,6 @@ th {
     background-color: #4b5563;
 }
 /* Add this to your existing CSS */
-
-th {
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-    padding-right: 30px;
-}
 
 th:first-child {
     cursor: default;
