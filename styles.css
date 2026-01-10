@@ -10,7 +10,7 @@ body {
 
 }
 
-parking_table {
+#parking_table {
     width: 100%;
     max-width: 100%;
     overflow-x: auto;  /* Horizontal scroll */
