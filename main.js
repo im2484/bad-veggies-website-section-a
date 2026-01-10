@@ -1,7 +1,7 @@
-d3.text("veggies.csv", function(data) {
+d3.text("violations_by_street.csv", function(data) {
     var parsedCSV = d3.csv.parseRows(data);
 
-    var container = d3.select("#veggiestable")
+    var container = d3.select("#parking_table")
         .append("table")
 
         .selectAll("tr")
