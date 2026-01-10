@@ -174,3 +174,27 @@ th {
 #clear-search:hover {
     background-color: #4b5563;
 }
+/* Add this to your existing CSS */
+
+th {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 30px;
+}
+
+th:first-child {
+    cursor: default;
+}
+
+.sort-icon {
+    cursor: pointer;
+    margin-left: 5px;
+    color: #6b7280;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.sort-icon:hover {
+    color: #3b82f6;
+}
