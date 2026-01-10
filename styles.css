@@ -10,6 +10,15 @@ body {
 
 }
 
+parking_table {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;  /* Horizontal scroll */
+    overflow-y: auto;  /* Vertical scroll */
+    max-height: 600px; /* Limit height */
+    border: 1px solid #ddd;
+}
+
 table {
 	border-collapse: collapse;
 	border: 2px black solid;
