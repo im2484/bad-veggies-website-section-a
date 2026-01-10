@@ -4,7 +4,7 @@ html {
 
 body {
 	background: white;
-	width: 50%;
+	width: 80%;
 	margin: 10px auto;
 	padding: 10px;
 
@@ -19,13 +19,22 @@ parking_table {
     border: 1px solid #ddd;
 }
 
+
 table {
-	border-collapse: collapse;
-	border: 2px black solid;
-	font: 12px sans-serif;
+    border-collapse: collapse;
+    min-width: 100%;
 }
 
-td {
-	border: 1px black solid;
-	padding: 5px;
+th, td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    white-space: nowrap; /* Prevents text wrapping */
+}
+
+th {
+    position: sticky;
+    top: 0;
+    background-color: #f3f4f6;
+    font-weight: bold;
+    z-index: 10;
 }
