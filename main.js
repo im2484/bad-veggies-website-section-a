@@ -40,5 +40,7 @@ function renderTable() {
             .data(function(d) { return d; }).enter()
             .append("td")
             .text(function(d) { return d; });
-    } else {
+    } 
+}
+else {
         var headers = allData[0]
