@@ -72,7 +72,7 @@ th {
 }
 
 .dropdown-hidden {
-    display: none;
+    display: none !important;
 }
 
 .dropdown-visible {
