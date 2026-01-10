@@ -184,17 +184,3 @@ th:first-child {
 #clear-search:hover {
     background-color: #4b5563;
 }
-/* Add this to your existing CSS */
-
-
-.sort-icon {
-    cursor: pointer;
-    margin-left: 5px;
-    color: #6b7280;
-    font-size: 12px;
-    display: inline-block;
-}
-
-.sort-icon:hover {
-    color: #3b82f6;
-}
