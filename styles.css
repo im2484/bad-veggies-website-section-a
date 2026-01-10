@@ -39,32 +39,61 @@ th {
     z-index: 10;
 }
 .filter-section {
-    background: #f9fafb;
-    padding: 15px;
+    position: relative;
     margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
 }
 
-.filter-section label {
+#dropdown-toggle {
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     font-weight: 600;
+    font-size: 14px;
+}
+
+#dropdown-toggle:hover {
+    background-color: #2563eb;
+}
+
+#dropdown-menu {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    background: white;
+    border: 2px solid #3b82f6;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 15px;
+    min-width: 300px;
+    z-index: 1000;
+}
+
+.dropdown-hidden {
+    display: none;
+}
+
+.dropdown-visible {
     display: block;
-    margin-bottom: 10px;
 }
 
 #violation-checkboxes {
-    margin: 10px 0;
-    max-height: 200px;
+    max-height: 250px;
     overflow-y: auto;
+    margin-bottom: 15px;
     padding: 10px;
-    background: white;
+    background: #f9fafb;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
 #violation-checkboxes label {
-    font-weight: normal;
+    display: block;
+    margin: 8px 0;
     cursor: pointer;
+    font-weight: normal;
 }
 
 #violation-checkboxes input[type="checkbox"] {
@@ -72,23 +101,32 @@ th {
     cursor: pointer;
 }
 
-button {
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.button-group button {
     padding: 8px 16px;
-    margin-right: 10px;
-    background-color: #3b82f6;
-    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
+    flex: 1;
 }
 
-button:hover {
-    background-color: #2563eb;
+#apply-filter {
+    background-color: #10b981;
+    color: white;
+}
+
+#apply-filter:hover {
+    background-color: #059669;
 }
 
 #reset-filter {
     background-color: #6b7280;
+    color: white;
 }
 
 #reset-filter:hover {
