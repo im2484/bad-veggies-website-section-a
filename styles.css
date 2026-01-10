@@ -180,7 +180,11 @@ th {
 /* Add this to your existing CSS */
 
 th:first-child {
-    cursor: default;
+    position: sticky;
+    left: 0;
+    background-color: #f3f4f6;
+    z-index: 11;
+    cursor: default; /* street_name shouldn't be clickable */
 }
 
 .sort-icon {
