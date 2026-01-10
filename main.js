@@ -1,6 +1,7 @@
 let allData = [];
 let selectedViolations = [];
 let dropdownOpen = false;
+let searchQuery = ""; // NEW: Track search query
 
 d3.text("violations_by_street.csv", function(data) {
     allData = d3.csv.parseRows(data);
@@ -26,7 +27,7 @@ d3.text("violations_by_street.csv", function(data) {
             .text(" " + violation);
     });
     
-    // Toggle dropdown button
+    // Toggle dropdown
     d3.select("#dropdown-toggle").on("click", function() {
         dropdownOpen = !dropdownOpen;
         var menu = d3.select("#dropdown-menu");
@@ -42,7 +43,7 @@ d3.text("violations_by_street.csv", function(data) {
         }
     });
     
-    // Apply filter button
+    // Apply filter
     d3.select("#apply-filter").on("click", function() {
         selectedViolations = [];
         d3.selectAll(".violation-checkbox:checked").each(function() {
@@ -51,10 +52,23 @@ d3.text("violations_by_street.csv", function(data) {
         renderTable();
     });
     
-    // Reset button
+    // Reset violations
     d3.select("#reset-filter").on("click", function() {
         d3.selectAll(".violation-checkbox").property("checked", true);
         selectedViolations = [];
+        renderTable();
+    });
+    
+    // NEW: Search input listener
+    d3.select("#street-search").on("input", function() {
+        searchQuery = this.value.toLowerCase().trim();
+        renderTable();
+    });
+    
+    // NEW: Clear search button
+    d3.select("#clear-search").on("click", function() {
+        d3.select("#street-search").property("value", "");
+        searchQuery = "";
         renderTable();
     });
     
@@ -68,6 +82,7 @@ function renderTable() {
     var headers = allData[0];
     var displayData;
     
+    // Filter by selected violations
     if (selectedViolations.length === 0) {
         displayData = allData;
     } else {
@@ -84,6 +99,15 @@ function renderTable() {
             return columnIndices.map(function(i) {
                 return row[i];
             });
+        });
+    }
+    
+    // NEW: Filter by search query
+    if (searchQuery !== "") {
+        displayData = displayData.filter(function(row, index) {
+            if (index === 0) return true; // Keep header row
+            var streetName = row[0].toLowerCase();
+            return streetName.includes(searchQuery);
         });
     }
     
